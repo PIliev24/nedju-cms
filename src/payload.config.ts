@@ -72,7 +72,7 @@ export default buildConfig({
   ],
   upload: {
     limits: {
-      fileSize: 500000000, 
+      fileSize: 500000000000000000, // 5MB, written in bytes
     },
   },
   secret: process.env.PAYLOAD_SECRET,

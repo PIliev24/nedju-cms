@@ -11,6 +11,7 @@ export interface Config {
     users: UserAuthOperations;
   };
   collections: {
+    products: Product;
     pages: Page;
     posts: Post;
     media: Media;
@@ -26,6 +27,7 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
+    products: ProductsSelect<false> | ProductsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -75,6 +77,53 @@ export interface UserAuthOperations {
   unlock: {
     email: string;
     password: string;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: string;
+  title?: string | null;
+  description?: string | null;
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    tablet?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
   };
 }
 /**
@@ -712,6 +761,10 @@ export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
+        relationTo: 'products';
+        value: string | Product;
+      } | null)
+    | ({
         relationTo: 'pages';
         value: string | Page;
       } | null)
@@ -791,6 +844,60 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        tablet?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
@@ -820,80 +927,11 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
-        cta?:
-          | T
-          | {
-              richText?: T;
-              links?:
-                | T
-                | {
-                    link?:
-                      | T
-                      | {
-                          type?: T;
-                          newTab?: T;
-                          reference?: T;
-                          url?: T;
-                          label?: T;
-                          appearance?: T;
-                        };
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        content?:
-          | T
-          | {
-              columns?:
-                | T
-                | {
-                    size?: T;
-                    richText?: T;
-                    enableLink?: T;
-                    link?:
-                      | T
-                      | {
-                          type?: T;
-                          newTab?: T;
-                          reference?: T;
-                          url?: T;
-                          label?: T;
-                          appearance?: T;
-                        };
-                    id?: T;
-                  };
-              id?: T;
-              blockName?: T;
-            };
-        mediaBlock?:
-          | T
-          | {
-              media?: T;
-              id?: T;
-              blockName?: T;
-            };
-        archive?:
-          | T
-          | {
-              introContent?: T;
-              populateBy?: T;
-              relationTo?: T;
-              categories?: T;
-              limit?: T;
-              selectedDocs?: T;
-              id?: T;
-              blockName?: T;
-            };
-        formBlock?:
-          | T
-          | {
-              form?: T;
-              enableIntro?: T;
-              introContent?: T;
-              id?: T;
-              blockName?: T;
-            };
+        cta?: T | CallToActionBlockSelect<T>;
+        content?: T | ContentBlockSelect<T>;
+        mediaBlock?: T | MediaBlockSelect<T>;
+        archive?: T | ArchiveBlockSelect<T>;
+        formBlock?: T | FormBlockSelect<T>;
       };
   meta?:
     | T
@@ -908,6 +946,90 @@ export interface PagesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CallToActionBlock_select".
+ */
+export interface CallToActionBlockSelect<T extends boolean = true> {
+  richText?: T;
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentBlock_select".
+ */
+export interface ContentBlockSelect<T extends boolean = true> {
+  columns?:
+    | T
+    | {
+        size?: T;
+        richText?: T;
+        enableLink?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaBlock_select".
+ */
+export interface MediaBlockSelect<T extends boolean = true> {
+  media?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ArchiveBlock_select".
+ */
+export interface ArchiveBlockSelect<T extends boolean = true> {
+  introContent?: T;
+  populateBy?: T;
+  relationTo?: T;
+  categories?: T;
+  limit?: T;
+  selectedDocs?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FormBlock_select".
+ */
+export interface FormBlockSelect<T extends boolean = true> {
+  form?: T;
+  enableIntro?: T;
+  introContent?: T;
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
